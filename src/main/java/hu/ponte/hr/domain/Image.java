@@ -23,6 +23,7 @@ public class Image {
 
     private long size;
 
+    @Lob
     private String digitalSign;
 
     @Lob

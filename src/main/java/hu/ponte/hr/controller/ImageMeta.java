@@ -19,5 +19,6 @@ public class ImageMeta {
         this.name = image.getName();
         this.mimeType = image.getMimeType();
         this.size = image.getSize();
+        this.digitalSign = image.getDigitalSign();
     }
 }

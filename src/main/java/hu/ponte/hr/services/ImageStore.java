@@ -19,15 +19,19 @@ import java.util.stream.Collectors;
 public class ImageStore {
 
     private final ImageRepository imageRepository;
+    private final SignService signService;
 
     @Autowired
-    public ImageStore(ImageRepository imageRepository) {
+    public ImageStore(ImageRepository imageRepository, SignService signService) {
         this.imageRepository = imageRepository;
+        this.signService = signService;
     }
 
     public void store(MultipartFile file) {
         try {
-            imageRepository.save(new Image(file));
+            Image image = new Image(file);
+            image.setDigitalSign(signService.sign(image.getImageData()));
+            imageRepository.save(image);
         } catch (IOException e) {
             throw new FileUploadFailedException("File upload (" + file.getName() + ") failed");
         }
