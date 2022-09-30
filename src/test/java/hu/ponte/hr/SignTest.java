@@ -39,7 +39,7 @@ public class SignTest {
     @Test
     public void testSign() {
         for (Map.Entry<String, String> entry : files.entrySet()) {
-            MultipartFile file = createMultipartFile(entry.getKey());
+            MultipartFile file = MultipartFileCreator.createMultipartFile(FILE_PATH_PREFIX + entry.getKey());
             try {
                 assertEquals(signService.sign(file.getBytes()), entry.getValue());
             } catch (IOException e) {
@@ -51,10 +51,8 @@ public class SignTest {
     @Test
     public void testVerifySuccess() {
         for (Map.Entry<String, String> entry : files.entrySet()) {
-            MultipartFile file = createMultipartFile(entry.getKey());
+            MultipartFile file = MultipartFileCreator.createMultipartFile(FILE_PATH_PREFIX + entry.getKey());
             try {
-                byte[] data = file.getBytes();
-                System.out.println("first element: " + data[data.length / 2]);
                 assertTrue(signService.verify(file.getBytes(), entry.getValue()));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -65,7 +63,7 @@ public class SignTest {
     @Test
     public void testVerifyFailed() {
         for (Map.Entry<String, String> entry : files.entrySet()) {
-            MultipartFile file = createMultipartFile(entry.getKey());
+            MultipartFile file = MultipartFileCreator.createMultipartFile(FILE_PATH_PREFIX + entry.getKey());
             try {
                 byte[] data = file.getBytes();
                 data[data.length / 2]++;
@@ -74,19 +72,6 @@ public class SignTest {
                 e.printStackTrace();
             }
         }
-    }
-
-    private MultipartFile createMultipartFile(String filePath) {
-        MultipartFile multipartFile = null;
-        try {
-            File file = new File(filePath);
-            FileInputStream input = new FileInputStream(FILE_PATH_PREFIX + file);
-            multipartFile = new MockMultipartFile("file", file.getName(),
-                    "image/jpg", IOUtils.toByteArray(input));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return multipartFile;
     }
 
 }
