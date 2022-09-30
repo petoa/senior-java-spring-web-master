@@ -55,6 +55,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, status);
     }
 
+    @ExceptionHandler(DigitalSignFailedException.class)
+    public ResponseEntity<ApiError> handleDigitalSignFailedException(DigitalSignFailedException ex) {
+        logger.error("Digital sign error: ", ex);
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        ApiError body = new ApiError("DIGITAL_SIGN_ERROR", "Digital sign error.", ex.getLocalizedMessage());
+
+        return new ResponseEntity<>(body, status);
+    }
+
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<ApiError> defaultErrorHandler(Throwable t) {
         logger.error("An unexpected error occurred: ", t);
